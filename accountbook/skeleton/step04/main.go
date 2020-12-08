@@ -4,6 +4,8 @@ package main
 
 import "fmt"
 
+/*
+ */
 type Item struct {
 	Category string
 	Price    int
@@ -14,14 +16,17 @@ func main() {
 	// TODO: 入力するデータの件数を入力してもらいnに入れる
 	var n int
 
-	// TODO:
+	fmt.Print("データ件数>")
+	fmt.Scan(&n)
+
 	// 複数のItem型の値を記録するために
 	// itemsという名前のItem型のスライスの変数を定義
 	// 長さ0で容量がnのスライスを作る
+	items := make([]Item, 0, n)
 
 	// iが0からitemsの容量-1の間繰り返す(n回繰り返す）
 	// cap(items)はitemsの容量を返す
-	for i := 0; ; /* TODO: 継続条件 */ i++ {
+	for i := 0; i < cap(items); i++ {
 		items = inputItem(items)
 	}
 
@@ -32,7 +37,7 @@ func main() {
 // 入力を行う関数
 // 追加を行うItemのスライスを受け取る
 // 新しく入力したItemをスライスに追加して返す
-func inputItem( /* TODO: Itemのスライスを受け取る */ ) []Item {
+func inputItem(items []Item) []Item {
 	var item Item
 
 	fmt.Print("品目>")
@@ -41,8 +46,8 @@ func inputItem( /* TODO: Itemのスライスを受け取る */ ) []Item {
 	fmt.Print("値段>")
 	fmt.Scan(&item.Price)
 
-	// TODO:
 	// スライスに新しく入力したitemを追加する
+	items = append(items, item)
 
 	return items
 }
@@ -53,9 +58,10 @@ func showItems(items []Item) {
 
 	// itemsの長さだけforを回す
 	// len(items)はitemsの長さを返す
-	for i := 0; ; /* TODO: 継続条件 */ i++ {
+	for i := 0; i < len(items); i++ {
 		// TODO: 「コーヒー:120円」のように出す
 		// items[i]はitemsのi番目の要素(0からスタートする)
+		fmt.Printf("%s:%d円\n", items[i].Category, items[i].Price)
 	}
 
 	fmt.Println("===========")

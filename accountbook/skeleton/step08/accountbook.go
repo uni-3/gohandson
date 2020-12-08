@@ -10,7 +10,7 @@ type Item struct {
 	Price    int
 }
 
-// 家計簿の処理を行う型
+// AccountBook 家計簿の処理を行う型
 type AccountBook struct {
 	db *sql.DB
 }
@@ -47,7 +47,7 @@ func (ab *AccountBook) AddItem(item *Item) error {
 	return nil
 }
 
-// 最近追加したものを最大limit件だけItemを取得する
+// GetItems 最近追加したものを最大limit件だけItemを取得する
 // エラーが発生したら第2戻り値で返す
 func (ab *AccountBook) GetItems(limit int) ([]*Item, error) {
 	// ORDER BY id DESCでidの降順（大きい順）=最近追加したものが先にくる
@@ -80,6 +80,16 @@ func (ab *AccountBook) GetItems(limit int) ([]*Item, error) {
 func (ab *AccountBook) GetSummaries() ([]*Summary, error) {
 	// TODO:
 	// GROUP BYで品目ごとにグループ化して金額の合計を出す
+	const sqlStr = `
+	SELECT
+		category,
+		COUNT(1) as count,
+		SUM(price) as sum
+	FROM
+		items
+	GROUP BY
+	    category
+	`
 	rows, err := ab.db.Query(sqlStr)
 	if err != nil {
 		return nil, err
@@ -117,4 +127,5 @@ func (s *Summary) Avg() float64 {
 		return 0
 	}
 	// TODO: 平均を求めて返す（float64にキャストが必要）
+	return float64(s.Sum) / float64(s.Count)
 }
